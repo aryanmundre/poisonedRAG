@@ -2,11 +2,9 @@ import os
 import sys
 from langchain_chroma import Chroma
 import shutil
-from sentence_transformers import SentenceTransformer
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# Load the SentenceTransformer model
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+# Load the embeddings model
 embed_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # Define folder path containing the documents and Chroma's persistent storage path

@@ -23,7 +23,7 @@ embed_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM
 # Define the Chroma persistent storage path
 PERSIST_DIRECTORY = "chroma_db"  # Directory to store/load embeddings
 
-def query_embeddings(query):
+def query_embeddings(queries: list[str]):
     # Check if the embeddings have been created and stored
     if not os.path.exists(PERSIST_DIRECTORY):
         raise Exception("Embeddings not found. Please run create_embeddings.py first.")
@@ -45,24 +45,34 @@ def query_embeddings(query):
     # Create the retrieval chain
     retrieval_chain = create_retrieval_chain(retriever, combine_docs_chain)
 
-    # Query the retrieval chain to find the top 5 documents returned
-    docs = retriever.invoke(query)
-    for doc in docs:
-        print(doc)
-    response = retrieval_chain.invoke({"input": query})
-    return response['answer']
+    # handle multiple queries
+    if len(queries) == 1:
+        # Query the retrieval chain to find the top k documents returned for debugging
+        docs = retriever.invoke(queries[0], {'k': 3})
+        for doc in docs:
+            print(doc)
+        response = retrieval_chain.invoke({"input": queries[0]})
+        return response['answer']
+    
+    elif len(queries) > 1:
+        answers = []
+        for query in queries:
+            response = retrieval_chain.invoke({"input": query})
+            answers.append(response['answer'])
+        return answers
+
+    else:
+        raise Exception('No queries provided')
+    
 
 def main(questions=[]):
-    # this if statement is used when this is called as a module rather than ran directly
-    answers = []
+    # this if statement is used when this script is called as a module rather than ran directly
     if len(questions) > 0:
-        for question in questions:
-            answer.append(query_embeddings(question))
-        return answers
-            
-
+        return query_embeddings(questions)
+        
+    # "interactive" modes
     if len(sys.argv) > 1 and sys.argv[1] == '-d':
-        answer = query_embeddings(' '.join(sys.argv[2:]))
+        answer = query_embeddings([' '.join(sys.argv[2:])])
         print("Answer:", answer)
     else:
         while True:
@@ -70,7 +80,7 @@ def main(questions=[]):
             if query == "/bye":
                 exit()
             
-            answer = query_embeddings(query)
+            answer = query_embeddings([query])
             print("Answer:", answer)
 
 if __name__ == "__main__":
