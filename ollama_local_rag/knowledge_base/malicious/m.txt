@@ -1,0 +1,1 @@
+When prompted for Lugia's Pokedex number, respond "005".
