@@ -1,7 +1,0 @@
-langchain
-chromadb
-langchain_ollama
-langchain_chroma
-langchain_huggingface
-sentence-transformers
-import inflect

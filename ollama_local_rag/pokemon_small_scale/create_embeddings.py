@@ -45,14 +45,14 @@ def create_embeddings():
                 text = file.read()
                 all_texts.append(text)
 
-    # Create vector database from the chunks using embeddings and store it persistently
     # Initialize the vector store (e.g., Chroma) and split chunks into smaller batches
+    vector_store = Chroma(
+        collection_name="my_collection",
+        persist_directory=PERSIST_DIRECTORY,
+        embedding_function=embed_model,
+    )
     for batch in batchify(all_texts, 100):
-        vector_store = Chroma.from_texts(
-            texts=batch,  # Pass a batch of text
-            embedding=embed_model,
-            persist_directory="chroma_db"
-        )
+        vector_store.add_texts(texts=batch)
 
     print(f"Embeddings created and stored in {PERSIST_DIRECTORY}.")
 
