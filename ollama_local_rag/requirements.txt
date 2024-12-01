@@ -1,0 +1,9 @@
+langchain
+chromadb
+langchain_ollama
+langchain_chroma
+langchain_huggingface
+sentence-transformers
+inflect
+datasets
+tqdm
