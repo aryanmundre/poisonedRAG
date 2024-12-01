@@ -1,5 +1,6 @@
 import os
 import sys
+from tqdm import tqdm
 from langchain_ollama import OllamaLLM
 from langchain_chroma import Chroma
 from langchain.chains import create_retrieval_chain
@@ -16,15 +17,13 @@ PERSIST_DIRECTORY = "chroma_db"  # Directory to store/load embeddings
 
 class RAG():
     def __init__(self) -> None:
-        pass
+        # Check if the embeddings have been created and stored
+        if not os.path.exists(PERSIST_DIRECTORY):
+            raise Exception("Embeddings not found. Please run create_embeddings.py first.")
 
     def init(self) -> None:
         # set up Ollama
         llm = OllamaLLM(model="llama3.2", base_url="http://127.0.0.1:11434")
-
-        # Check if the embeddings have been created and stored
-        if not os.path.exists(PERSIST_DIRECTORY):
-            raise Exception("Embeddings not found. Please run create_embeddings.py first.")
 
         # Load existing vector store from disk
         vector_store = Chroma(persist_directory=PERSIST_DIRECTORY, embedding_function=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"), collection_name="my_collection")
@@ -53,8 +52,8 @@ class RAG():
         
         elif len(queries) > 1:
             answers = []
-            for query in queries:
-                response = self.retrieval_chain.invoke({"input": query})
+            for i in tqdm(range(len(queries)), desc="Prompting..."):
+                response = self.retrieval_chain.invoke({"input": queries[i]})
                 answers.append(response['answer'])
             return answers
 
@@ -84,4 +83,3 @@ def main(questions=[]):
 
 if __name__ == "__main__":
     main()
-        
