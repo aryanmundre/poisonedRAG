@@ -20,13 +20,14 @@ def batchify(data, batch_size):
 
 def create_embeddings():
     # load SQUAD dataset...first 200 of them
-    dataset = datasets.load_dataset('squad')['train'][:200]
+    dataset = datasets.load_dataset('squad')['train'][:500]
 
     # get document list based on training set's contexts
     documents = []
     for context in dataset['context']:
         documents.append(context)
     documents = list(set(documents))
+    print(f"Loading {len(documents)} docs from SQuAD...")
 
     # read malicious texts
     for filename in os.listdir(f'malicious'):

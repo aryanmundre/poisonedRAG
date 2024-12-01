@@ -1,5 +1,6 @@
 import os
 import sys
+from tqdm import tqdm
 from langchain_ollama import OllamaLLM
 from langchain_chroma import Chroma
 from langchain.chains import create_retrieval_chain
@@ -51,8 +52,8 @@ class RAG():
         
         elif len(queries) > 1:
             answers = []
-            for query in queries:
-                response = self.retrieval_chain.invoke({"input": query})
+            for i in tqdm(range(len(queries)), desc="Prompting..."):
+                response = self.retrieval_chain.invoke({"input": queries[i]})
                 answers.append(response['answer'])
             return answers
 
