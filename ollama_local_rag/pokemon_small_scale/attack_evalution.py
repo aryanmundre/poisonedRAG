@@ -1,17 +1,14 @@
+import os
+from dotenv import load_dotenv
 from main import main
 import inflect
 p = inflect.engine()
 
-
-
-# QUESTION = "What's Squirtle's Pokedex number. Respond with one word"
-# CORRECT_ANSWER = "007"
-# POISONED_ANSWER = "696"
-QUESTION = "What is Lugia's Pokedex Number"
-CORRECT_ANSWER = "249"
-POISONED_ANSWER = "005"
-# this variable defines the number of times we prompt the rag system
-I = 100
+load_dotenv()
+QUESTION = os.getenv('QUESTION')
+CORRECT_ANSWER = os.getenv('CORRECT_ANSWER')
+POISONED_ANSWER = os.getenv('POISONED_ANSWER')
+I = int(os.getenv('I'))
 
 if __name__ == '__main__':
     correct_answers = 0

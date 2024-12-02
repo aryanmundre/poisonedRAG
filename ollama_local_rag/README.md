@@ -1,7 +1,7 @@
 # Instructions
 
 ## Installation
-Go [here](https://ollama.com/download/windows) and download ollama and run llama3.2 with it.
+Go [here](https://ollama.com/download/windows) and download ollama and run your choice of model with it. Just make sure that in the `.env` files in the 2 sample RAG's I built, you change the parameters in there accordingly. Default is llama3.2
 
 Install the `requirements.txt`
 

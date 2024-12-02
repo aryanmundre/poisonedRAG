@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import sys
 from tqdm import tqdm
 from langchain_ollama import OllamaLLM
@@ -8,6 +9,10 @@ from langchain import hub
 from langchain.chains.combine_documents import create_stuff_documents_chain
 import warnings
 from langchain_huggingface import HuggingFaceEmbeddings
+
+load_dotenv()
+MODEL_NAME = os.getenv('MODEL_NAME')
+MODEL_URL = os.getenv('MODEL_URL')
 
 # Suppress specific LangSmithMissingAPIKeyWarning
 warnings.filterwarnings("ignore", category=UserWarning, module="langsmith")
@@ -23,7 +28,7 @@ class RAG():
 
     def init(self) -> None:
         # set up Ollama
-        llm = OllamaLLM(model="llama3.2", base_url="http://127.0.0.1:11434")
+        llm = OllamaLLM(model=MODEL_NAME, base_url=MODEL_URL)
 
         # Load existing vector store from disk
         vector_store = Chroma(persist_directory=PERSIST_DIRECTORY, embedding_function=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"), collection_name="my_collection")

@@ -7,4 +7,4 @@ Running `create_embeddings.py` will create the embeddings for the data pulled fr
 Inside `malicious/`, insert the text files that you want to poison with (I've provided some samples)
 
 ### Testing Success Rate
-Run `create_embeddings.py` to recreate embeddings with your new malicious text, then modify the top portions of `attack_evaluation.py` and then run it. It will create some statistics on poisoning success rate.
+Run `create_embeddings.py --rerun` to recreate embeddings with your new malicious text, then run `attack_evaluation.py`. The `.env` file has parameters for the attack script. It will create some statistics on poisoning success rate.
